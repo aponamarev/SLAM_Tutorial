@@ -1,7 +1,7 @@
 import math
 import pygame
 
-from tools import reporting
+from tools import reporting as rprt
 
 
 class Colors(object):
@@ -31,9 +31,9 @@ class BuildEnvironment(object):
             map_dim (tuple): hight and width of the map. Defaults to (-1, -1) - use file dimentions.
         """
         # preconditions
-        reporting.assert_is_instance(path, str, prefix=__name__)
-        reporting.assert_is_not_empty(path, prefix=__name__) 
-        reporting.assert_path_exists(path=path, prefix=__name__)
+        rprt.is_instance(path, str, prefix=__name__)
+        rprt.is_not_empty(path, prefix=__name__) 
+        rprt.path_exists(path=path, prefix=__name__)
 
         pygame.init()
         self.point_cloud = []
@@ -43,6 +43,29 @@ class BuildEnvironment(object):
         pygame.display.set_caption(self.widow_title)
         self.map = pygame.display.set_mode((self.mapw, self.maph))
         self.map.blit(self.gt_map, (0,0))
+    
+    def polar2cortesian(self, distance, angle) -> tuple:
+
+        x = distance * math.cos(angle)
+        y = -distance * math.sin(angle)
+
+        return x, y
+
+    def delta2absolute(self, distance, angle, initial_position) -> tuple:
+
+        x, y = self.polar2cortesian(distance, angle)
+
+        return x+initial_position[0], y+initial_position[1]
+    
+    def data_storage(self, data):
+        for elements in data:
+            point = self.delta2absolute(elements[0], elements[1], elements[2])
+            self.point_cloud.append(point)
+    
+    def show_sensor_data(self):
+        self.infomap = self.map.copy()
+        for point in self.point_cloud:
+            self.infomap.set_at((int(point[0]), int(point[1])), Colors.red)
 
         
 

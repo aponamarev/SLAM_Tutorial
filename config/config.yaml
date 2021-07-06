@@ -1,2 +1,6 @@
 lidar:
   map: "images/mock_floor_plan.jpg"
+  range: 200
+  uncertainty:
+    distance: 0.5
+    angle: 0.01

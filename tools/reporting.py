@@ -16,36 +16,48 @@ def _add_prefix(msg: str, prefix: str) -> str:
     return msg
 
 
-def assert_true(condition: bool, msg: str=None):
+def is_true(condition: bool, msg: str=None):
 
     if msg is not None:
         raise ValueError(msg)
 
-def assert_equal(v0, v1, prefix: str=None):
+def is_equal(v0, v1, prefix: str=None):
     if v0!=v1:
         _msg = f"{v0} (value0) != {v1} (value1)."
         _msg = _add_prefix(_msg, prefix)
         raise ValueError(_msg)
 
-def assert_path_exists(path: str, prefix: str=None):
+def is_greater(v0, v1, prefix: str=None):
+    if not v0>v1:
+        _msg = f"{v0} (value0) not greater than {v1} (value1)."
+        _msg = _add_prefix(_msg, prefix)
+        raise ValueError(_msg)
+
+def is_greater_or_equal(v0, v1, prefix: str=None):
+    if v0>=v1:
+        _msg = f"{v0} (value0) not greater or equal to {v1} (value1)."
+        _msg = _add_prefix(_msg, prefix)
+        raise ValueError(_msg)
+
+def path_exists(path: str, prefix: str=None):
     if not osp.exists(path):
         _msg = f"Path {path} does not exists."
         _msg = _add_prefix(_msg, prefix)
         raise FileExistsError(_msg)
 
-def assert_is_instance(obj, t: type, prefix: str=None):
+def is_instance(obj, t: type, prefix: str=None):
     if not isinstance(obj, t):
         _msg = f"Incorrect object type: {type(obj).__name__}"
         _msg = _add_prefix(_msg, prefix)
         raise TypeError(_msg)
 
-def assert_is_not_none(obj, prefix: str=None):
+def is_not_none(obj, prefix: str=None):
     if obj is None:
         _msg = f"Object is None."
         _msg = _add_prefix(_msg, prefix)
         raise ValueError(_msg)
 
-def assert_is_not_empty(obj, prefix: str=None):
+def is_not_empty(obj, prefix: str=None):
     if len(obj)==0:
         _msg = f"Object is empty."
         _msg = _add_prefix(_msg, prefix)
